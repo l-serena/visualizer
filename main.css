@@ -71,6 +71,11 @@ button:hover {
     background-color: #810c28;
 }
 
+.industry {
+  background: #CDCDCD;
+  border-radius: 0.25em;
+}
+
 path:hover, circle:hover {
     stroke: #810c28 !important;
     stroke-width: 2px;
