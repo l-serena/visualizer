@@ -72,6 +72,7 @@ button:hover {
 }
 
 .industry {
+  display: inline;
   background: #CDCDCD;
   border-radius: 0.25em;
 }
