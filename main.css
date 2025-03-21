@@ -73,8 +73,10 @@ button:hover {
 
 .industry {
   display: inline;
-  background: #90D6FF;
-  border-radius: 0.5em;
+  background: #D3D3D3;
+  border-radius: 1em;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 path:hover, circle:hover {
