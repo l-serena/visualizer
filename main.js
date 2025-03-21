@@ -71,9 +71,10 @@ $(document).ready(function () {
                 rows.slice(1).forEach(row => {
                     let organization = row[0]?.trim().toUpperCase().replace(/['"]+/g, ''); // Remove single/double quotes
                     let state = row[1]?.trim();
-                    let score = parseFloat(row[3]?.trim());
+                    let industry = row[2]?.trim();
+                    let c = parseFloat(row[3]?.trim());
 
-                    if (state && organization && !isNaN(score)) {
+                    if (state && organization && !isNaN(c) && industry) {
                         if (!organizationData[state]) {
                             organizationData[state] = [];
                         }
@@ -81,8 +82,8 @@ $(document).ready(function () {
                             stateScores[state] = 0;
                         }
 
-                        organizationData[state].push(`${organization}: ${score}`);
-                        stateScores[state] += score;
+                        organizationData[state].push('${organization}: <div class="industry">${industry}</div>');
+                        stateScores[state] += c;
                     }
                 });
 
