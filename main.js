@@ -82,7 +82,7 @@ $(document).ready(function () {
                             stateScores[state] = 0;
                         }
 
-                        organizationData[state].push(${organization}: <div display="inline" class="industry">${industry}</div>);
+                        organizationData[state].push(`${organization}: <div class="industry">${industry}</div>`);
                         stateScores[state] += c;
                     }
                 });
