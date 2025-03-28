@@ -5,7 +5,7 @@ $(document).ready(function () {
     let stateScores = {};
     let minScore = 0;
     let maxScore = 0;
-    
+
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQuXxHfMvZnJV1LwPEnNUOjlS4JAgVdgUtf95Lfn8EGDE-GtaRM0eaDsmy0IDEVabRF1P22j4pmVI8E/pub?gid=0&single=true&output=csv";
 
     const presetConnections = [
@@ -13,24 +13,24 @@ $(document).ready(function () {
         { from: "CA", to: "TX" },
         { from: "FL", to: "OH" },
     ];
-    
-    function getStateCenter(stateId) {
-    let state = $("#" + stateId);
-    if (state.length === 0) return null;
-    let bbox = state[0].getBBox();
 
-    if (stateId !== 'FL') {
-        return {
-            x: bbox.x + bbox.width / 2,
-            y: bbox.y + bbox.height / 2
-        };
-    } else {
-        return {
-            x: bbox.x + bbox.width / 2 + 40,
-            y: bbox.y + bbox.height / 2
-        };
+    function getStateCenter(stateId) {
+        let state = $("#" + stateId);
+        if (state.length === 0) return null;
+        let bbox = state[0].getBBox();
+
+        if (stateId !== 'FL') {
+            return {
+                x: bbox.x + bbox.width / 2,
+                y: bbox.y + bbox.height / 2
+            };
+        } else {
+            return {
+                x: bbox.x + bbox.width / 2 + 40,
+                y: bbox.y + bbox.height / 2
+            };
+        }
     }
-}
 
     function drawLine(state1, state2) {
         let pos1 = getStateCenter(state1);
@@ -67,23 +67,24 @@ $(document).ready(function () {
             .then(response => response.text())
             .then(csvData => {
                 let rows = csvData.split("\n").map(row => row.split(","));
-                
                 rows.slice(1).forEach(row => {
                     let organization = row[0]?.trim().toUpperCase().replace(/['"]+/g, ''); // Remove single/double quotes
                     let state = row[1]?.trim();
                     let industry = row[2]?.trim();
                     let c = parseFloat(row[3]?.trim());
-
                     if (state && organization && !isNaN(c) && industry) {
-                        if (!organizationData[state]) {
-                            organizationData[state] = [];
-                        }
-                        if (!stateScores[state]) {
-                            stateScores[state] = 0;
-                        }
-
-                        organizationData[state].push(`${organization}: <div class="industry">${industry}</div>`);
-                        stateScores[state] += c;
+                        let stateList = state.split(";").map(s => s.trim().toUpperCase());
+                 
+                        stateList.forEach(stateItem => {
+                            if (!organizationData[stateItem]) {
+                                organizationData[stateItem] = [];
+                            }
+                            if (!stateScores[stateItem]) {
+                                stateScores[stateItem] = 0;
+                            }
+                            organizationData[stateItem].push(`${organization}: <div class="industry">${industry}</div>`);
+                            stateScores[stateItem] += c;
+                        });
                     }
                 });
 
@@ -92,7 +93,7 @@ $(document).ready(function () {
 
                 console.log("✅ Google Sheets data loaded successfully:", organizationData, stateScores);
 
-                // ✅ Now apply colors AFTER data is ready
+                // Apply colors AFTER data is ready
                 applyStateColors();
             })
             .catch(error => {
@@ -122,7 +123,7 @@ $(document).ready(function () {
             }
         });
     }
-
+  
     fetchGoogleSheetsData();
 
     $("path, circle").hover(function () {
